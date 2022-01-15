@@ -62,6 +62,7 @@ ratingsHostname = "ratings" if (os.environ.get("RATINGS_HOSTNAME") is None) else
 reviewsHostname = "reviews" if (os.environ.get("REVIEWS_HOSTNAME") is None) else os.environ.get("REVIEWS_HOSTNAME")
 
 flood_factor = 0 if (os.environ.get("FLOOD_FACTOR") is None) else int(os.environ.get("FLOOD_FACTOR"))
+group_number = 0 if (os.environ.get("GROUP_NUMBER") is None) else int(os.environ.get("GROUP_NUMBER"))
 
 details = {
     "name": "http://{0}{1}:9080".format(detailsHostname, servicesDomain),
@@ -296,6 +297,7 @@ def floodReviews(product_id, headers):
 @app.route('/productpage')
 @trace()
 def front():
+    groupnumber=group_number
     product_id = 0  # TODO: replace default value
     headers = getForwardHeaders(request)
     user = session.get('user', '')
@@ -308,6 +310,7 @@ def front():
     reviewsStatus, reviews = getProductReviews(product_id, headers)
     return render_template(
         'productpage.html',
+        groupnumber=groupnumber,
         detailsStatus=detailsStatus,
         reviewsStatus=200,
         product=product,
